@@ -17,9 +17,16 @@ const QuestionRouter = require('./Router/question.router');
 app.use('/users', UserRouter);
 app.use('/questions', QuestionRouter)
 
-app.get("/",(req,res)=>{
-    res.send("server working");
-});
+if(process.env.NODE_ENV ==='production')
+{
+    app.use('/' , express.static('client/build'))
+
+    app.get('*' , (req , res)=>{
+
+        res.sendFile(path.resolve(__dirname  , 'client/build/index.html'))
+
+    })
+}
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Server has started on port ${PORT}`))
